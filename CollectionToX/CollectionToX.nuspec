@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>CollectionToX</id>
+    <version>1.0</version>
+    <authors>zgirod</authors>
+    <owners>zgirod</owners>
+    <projectUrl>https://github.com/zgirod/CollectionToX</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Generic export for .net collections to CSV or Excel</description>
+    <copyright>Copyright 2017</copyright>
+    <tags>.net excel csv export generic collection</tags>
+  </metadata>
+</package>
