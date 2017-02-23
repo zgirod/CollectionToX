@@ -128,10 +128,14 @@ namespace CollectionToX.Exports
                         attributeStyleDictionary.Add(property.PropertyInfo.Name, excelPropertyStyleExportAttribute);
 
                     }
-                    
+
 
                     //set the value
-                    _worksheet.Cell(_rowNumber, col).Value = property.PropertyInfo.GetValue(item, null).ToString();
+                    var obj = property.PropertyInfo.GetValue(item, null);
+                    if (obj != null)
+                        _worksheet.Cell(_rowNumber, col).Value = obj.ToString();
+                    else
+                        _worksheet.Cell(_rowNumber, col).Value = null;
 
                     //set column based styles
                     _worksheet.Cell(_rowNumber, col).Style.NumberFormat.Format = excelPropertyStyleExportAttribute.NumberFormat;

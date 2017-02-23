@@ -23,7 +23,8 @@ namespace CollectionToX.Tests.Exports
             var data = new List<Foo>()
             {
                 new Foo() { Name = "Marshall", City = "Paw", State = "MN" },
-                new Foo() { Name = "Carlos", City = "Patrol", State = "MD" }
+                new Foo() { Name = "Carlos", City = "Patrol", State = "MD" },
+                new Foo() { Name = "Carlos", City = "Patrol", State = "MD", NullableInt = 19 }
             };
 
             var export = new DelimitedExport(Delimiter.COMMA);

@@ -152,7 +152,9 @@ namespace CollectionToX.Exports
                     if (first == false)
                         sbRow.Append(_delimiter);
 
-                    sbRow.AppendFormat("\"{0}\"", property.PropertyInfo.GetValue(item, null).ToString());
+                    var obj = property.PropertyInfo.GetValue(item, null);
+                    if (obj != null)
+                        sbRow.AppendFormat("\"{0}\"", obj.ToString());
                     first = false;
 
                 }

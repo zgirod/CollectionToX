@@ -25,7 +25,8 @@ namespace CollectionToX.Tests.Exports
             var data = new List<Foo>()
             {
                 new Foo() { Name = "Marshall", City = "Paw", State = "MN" },
-                new Foo() { Name = "Carlos", City = "Patrol", State = "MD" }
+                new Foo() { Name = "Carlos", City = "Patrol", State = "MD" },
+                new Foo() { Name = "Carlos", City = "Paw", State = "ND", NullableInt = 19 }
             };
 
             var export = new ExcelExport();
