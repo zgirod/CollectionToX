@@ -44,7 +44,11 @@ namespace CollectionToX.Exports
             using (MemoryStream stream = new MemoryStream())
             {
                 _workbook.SaveAs(stream);
-                return stream;
+                stream.Seek(0, SeekOrigin.Begin);
+                var copyStream = new MemoryStream();
+                stream.CopyTo(copyStream);
+                copyStream.Seek(0, SeekOrigin.Begin);
+                return copyStream;
             }
 
         }
