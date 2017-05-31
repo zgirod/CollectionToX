@@ -33,7 +33,8 @@ namespace CollectionToX.Attributes
 
         public string HeaderName { get; set; }
 
-        public string NumberFormat { get; set; }
+        public int? NumberFormatId { get; set; }
+        public string NumberFormatCustom { get; set; }
 
         public HorizontalAlignment HorizontalAlignment { get; set; }
         public VerticalAlignment VerticalAlignment { get; set; }
@@ -71,7 +72,8 @@ namespace CollectionToX.Attributes
         public ExcelPropertyStyleExportAttribute()
         {
             HeaderName = null;
-            NumberFormat = "General";
+            NumberFormatId = null;
+            NumberFormatCustom = "General";
             HorizontalAlignment = HorizontalAlignment.General;
             VerticalAlignment = VerticalAlignment.Bottom;
         }

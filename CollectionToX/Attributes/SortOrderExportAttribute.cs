@@ -14,7 +14,6 @@ namespace CollectionToX.Attributes
 
         public SortOrderExportAttribute()
         {
-            //this.SortOrder = sortOrder;
         }
 
     }

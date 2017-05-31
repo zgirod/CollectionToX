@@ -133,7 +133,6 @@ namespace CollectionToX.Exports
 
                     }
 
-
                     //set the value
                     var obj = property.PropertyInfo.GetValue(item, null);
                     if (obj != null)
@@ -142,7 +141,15 @@ namespace CollectionToX.Exports
                         _worksheet.Cell(_rowNumber, col).Value = null;
 
                     //set column based styles
-                    _worksheet.Cell(_rowNumber, col).Style.NumberFormat.Format = excelPropertyStyleExportAttribute.NumberFormat;
+                    if (excelPropertyStyleExportAttribute.NumberFormatId.HasValue == true)
+                    {
+                        _worksheet.Cell(_rowNumber, col).Style.NumberFormat.NumberFormatId = excelPropertyStyleExportAttribute.NumberFormatId.Value;
+                    }
+                    else
+                    {
+                        _worksheet.Cell(_rowNumber, col).Style.NumberFormat.Format = excelPropertyStyleExportAttribute.NumberFormatCustom;
+                    }
+                    
                     _worksheet.Cell(_rowNumber, col).Style.Alignment.Vertical = excelPropertyStyleExportAttribute.ExcelVerticalAlignment;
                     _worksheet.Cell(_rowNumber, col).Style.Alignment.Horizontal = excelPropertyStyleExportAttribute.ExcelHorizontalAlignment;
 
