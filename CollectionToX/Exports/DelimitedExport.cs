@@ -61,7 +61,7 @@ namespace CollectionToX.Exports
 
         }
 
-        public DelimitedExport AddCollectionToExcel<T>(IEnumerable<T> data)
+        public DelimitedExport AddCollection<T>(IEnumerable<T> data)
         {
 
             //add data to the stream
@@ -78,7 +78,10 @@ namespace CollectionToX.Exports
             {
                 var encoding = new ASCIIEncoding();
                 stream.Write(encoding.GetBytes(_stringBuilder.ToString()), 0, _stringBuilder.Length);
-                return stream;
+                var copyStream = new MemoryStream();
+                stream.CopyTo(copyStream);
+                copyStream.Seek(0, SeekOrigin.Begin);
+                return copyStream;
             }
 
         }

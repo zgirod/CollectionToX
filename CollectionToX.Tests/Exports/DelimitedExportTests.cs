@@ -22,13 +22,13 @@ namespace CollectionToX.Tests.Exports
 
             var data = new List<Foo>()
             {
-                new Foo() { Name = "Marshall", City = "Paw", State = "MN" },
-                new Foo() { Name = "Carlos", City = "Patrol", State = "MD" },
+                new Foo() { Name = "Marshall", City = "Paw", State = "MN", FoundingDate = DateTime.Parse("7/1/2017") },
+                new Foo() { Name = "Carlos", City = "Patrol", State = "MD", FoundingDate = DateTime.Parse("7/1/2017 10:10:10") },
                 new Foo() { Name = "Carlos", City = "Patrol", State = "MD", NullableInt = 19 }
             };
 
             var export = new DelimitedExport(Delimiter.COMMA);
-            export.AddCollectionToExcel<Foo>(data);
+            export.AddCollection<Foo>(data);
             export.SaveAsFile(filepath);
 
             //TODO: Assert something
@@ -50,7 +50,7 @@ namespace CollectionToX.Tests.Exports
 
             var export = new DelimitedExport(Delimiter.PIPE);
             export.AddLine(new string[] { "This is the Title", DateTime.Parse("5/5/2000").ToShortDateString() });
-            export.AddCollectionToExcel<Foo>(data);
+            export.AddCollection<Foo>(data);
             export.SaveAsFile(filepath);
 
             //TODO: Assert something

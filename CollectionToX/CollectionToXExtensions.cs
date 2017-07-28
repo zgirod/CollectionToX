@@ -55,7 +55,7 @@ namespace CollectionToX
         public static HttpResponseMessage ToDelimitedHttpResponseMessage<T>(this IEnumerable<T> data, Delimiter delimiter, string fileName) where T : class
         {
             var export = new DelimitedExport(delimiter);
-            var ms = export.AddCollectionToExcel<T>(data).SaveAsMemoryStream();
+            var ms = export.AddCollection<T>(data).SaveAsMemoryStream();
             ms.Seek(0, SeekOrigin.Begin);
             var httpResponse = new HttpResponseMessage();
             httpResponse.Content = new StreamContent(ms);

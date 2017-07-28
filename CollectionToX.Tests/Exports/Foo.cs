@@ -11,6 +11,7 @@ namespace CollectionToX.Tests.Exports
         public string Name { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public DateTime? FoundingDate { get; set; }
         public int? NullableInt { get; set; }
     }
 }
