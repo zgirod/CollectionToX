@@ -74,15 +74,16 @@ namespace CollectionToX.Exports
         {
 
             //return the workbook as a stream
+            MemoryStream copyStream = new MemoryStream();
             using (MemoryStream stream = new MemoryStream())
             {
                 var encoding = new ASCIIEncoding();
                 stream.Write(encoding.GetBytes(_stringBuilder.ToString()), 0, _stringBuilder.Length);
-                var copyStream = new MemoryStream();
+                stream.Seek(0, SeekOrigin.Begin);
                 stream.CopyTo(copyStream);
                 copyStream.Seek(0, SeekOrigin.Begin);
-                return copyStream;
             }
+            return copyStream;
 
         }
 

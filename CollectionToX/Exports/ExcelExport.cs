@@ -74,6 +74,10 @@ namespace CollectionToX.Exports
             //add in the data
             AddDataRows(data, propertyList, excelSheetStyleExportAttribute);
 
+            //adjust each column to the contents
+            for(int col = 1; col <= propertyList.Count(); col++)
+                _worksheet.Column(col).AdjustToContents();
+
         }
 
         private void AddHeaderRow(List<PropertyListItem> propertyList, ExcelSheetStyleExportAttribute excelSheetStyleExportAttribute)
