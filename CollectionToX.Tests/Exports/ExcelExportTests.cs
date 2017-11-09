@@ -32,6 +32,10 @@ namespace CollectionToX.Tests.Exports
             var export = new ExcelExport();
             export.AddCollectionToExcel<Foo>(data, "first");
             export.AddCollectionToExcel<Foo>(data, "second");
+
+            export.AddBlankRowsToWorksheet("first", 10);
+            export.AddCollectionToExistingSheet<Foo>(data, "first");
+
             export.SaveAsExcelFile(filepath);
 
             //TODO: Assert something

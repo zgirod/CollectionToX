@@ -21,18 +21,36 @@ namespace CollectionToX.Exports
 
             //setup the excel sheet
             _workbook = new XLWorkbook();
+            _worksheetRowNumbers = new Dictionary<string, int>();
 
         }
 
         private IXLWorksheet _worksheet { get; set; }
-        private int _rowNumber { get; set; }
+        private Dictionary<string, int> _worksheetRowNumbers;
 
         public ExcelExport AddCollectionToExcel<T>(IEnumerable<T> data, string sheetName)
         {
 
             //build the excel workbook
-            _rowNumber = 1;
-            BuildExcelWorkbook(data, typeof(T), sheetName);
+            _worksheetRowNumbers.Add(sheetName.CleanExcelSheetName(), 1);
+            BuildExcelWorksheet(data, typeof(T), sheetName);
+            return this;
+
+        }
+
+        public ExcelExport AddCollectionToExistingSheet<T>(IEnumerable<T> data, string sheetName)
+        {
+
+            AddToExcelWorksheet(data, typeof(T), sheetName);
+            return this;
+
+        }
+
+        public ExcelExport AddBlankRowsToWorksheet(string sheetName, int numberOfRows)
+        {
+
+            for(int i = 1; i <= numberOfRows; i++)
+                _worksheetRowNumbers[sheetName.CleanExcelSheetName()] = _worksheetRowNumbers[sheetName.CleanExcelSheetName()] + 1;
             return this;
 
         }
@@ -61,7 +79,7 @@ namespace CollectionToX.Exports
 
         }
 
-        private void BuildExcelWorkbook<T>(IEnumerable<T> data, Type type, string sheetName)
+        private void BuildExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName)
         {
 
             _worksheet = _workbook.Worksheets.Add(sheetName.CleanExcelSheetName());
@@ -76,6 +94,24 @@ namespace CollectionToX.Exports
 
             //adjust each column to the contents
             for(int col = 1; col <= propertyList.Count(); col++)
+                _worksheet.Column(col).AdjustToContents();
+
+        }
+
+        private void AddToExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName)
+        {
+
+            //get the existing excel
+            var cleanName = sheetName.CleanExcelSheetName();
+            _worksheet = _workbook.Worksheets.Single(x => x.Name == cleanName);
+            var excelSheetStyleExportAttribute = (ExcelSheetStyleExportAttribute)type.GetCustomAttributes(true).FirstOrDefault(x => x is ExcelSheetStyleExportAttribute) ?? new ExcelSheetStyleExportAttribute();
+            var propertyList = ObjectToPropertList.GetPropertyList(type);
+
+            //add in the data
+            AddDataRows(data, propertyList, excelSheetStyleExportAttribute);
+
+            //adjust each column to the contents
+            for (int col = 1; col <= propertyList.Count(); col++)
                 _worksheet.Column(col).AdjustToContents();
 
         }
@@ -95,10 +131,10 @@ namespace CollectionToX.Exports
                 var headerName = property.PropertyInfo.Name;
                 if (string.IsNullOrWhiteSpace(excelPropertyStyleExportAttribute.HeaderName) == false)
                     headerName = excelPropertyStyleExportAttribute.HeaderName;
-                _worksheet.Cell(_rowNumber, col).Value = headerName;
-                _worksheet.Cell(_rowNumber, col).Style.Font.FontName = excelSheetStyleExportAttribute.FontFamily;
-                _worksheet.Cell(_rowNumber, col).Style.Font.FontSize = excelSheetStyleExportAttribute.FontSizeHeader;
-                _worksheet.Cell(_rowNumber, col).Style.Font.Bold = excelSheetStyleExportAttribute.BoldHeader;
+                _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = headerName;
+                _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontName = excelSheetStyleExportAttribute.FontFamily;
+                _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontSize = excelSheetStyleExportAttribute.FontSizeHeader;
+                _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.Bold = excelSheetStyleExportAttribute.BoldHeader;
 
                 //go to the next column
                 col++;
@@ -106,7 +142,7 @@ namespace CollectionToX.Exports
             }
 
             //go to the next row
-            _rowNumber++;
+            _worksheetRowNumbers[_worksheet.Name] = _worksheetRowNumbers[_worksheet.Name] + 1;
 
         }
 
@@ -140,26 +176,26 @@ namespace CollectionToX.Exports
                     //set the value
                     var obj = property.PropertyInfo.GetValue(item, null);
                     if (obj != null)
-                        _worksheet.Cell(_rowNumber, col).Value = obj.ToString();
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = obj.ToString();
                     else
-                        _worksheet.Cell(_rowNumber, col).Value = null;
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = null;
 
                     //set column based styles
                     if (excelPropertyStyleExportAttribute.NumberFormatId.HasValue == true)
                     {
-                        _worksheet.Cell(_rowNumber, col).Style.NumberFormat.NumberFormatId = excelPropertyStyleExportAttribute.NumberFormatId.Value;
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.NumberFormat.NumberFormatId = excelPropertyStyleExportAttribute.NumberFormatId.Value;
                     }
                     else
                     {
-                        _worksheet.Cell(_rowNumber, col).Style.NumberFormat.Format = excelPropertyStyleExportAttribute.NumberFormatCustom;
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.NumberFormat.Format = excelPropertyStyleExportAttribute.NumberFormatCustom;
                     }
                     
-                    _worksheet.Cell(_rowNumber, col).Style.Alignment.Vertical = excelPropertyStyleExportAttribute.ExcelVerticalAlignment;
-                    _worksheet.Cell(_rowNumber, col).Style.Alignment.Horizontal = excelPropertyStyleExportAttribute.ExcelHorizontalAlignment;
+                    _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Alignment.Vertical = excelPropertyStyleExportAttribute.ExcelVerticalAlignment;
+                    _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Alignment.Horizontal = excelPropertyStyleExportAttribute.ExcelHorizontalAlignment;
 
                     //set the sheet based styles
-                    _worksheet.Cell(_rowNumber, col).Style.Font.FontName = excelSheetStyleExportAttribute.FontFamily;
-                    _worksheet.Cell(_rowNumber, col).Style.Font.FontSize = excelSheetStyleExportAttribute.FontSizeData;
+                    _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontName = excelSheetStyleExportAttribute.FontFamily;
+                    _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontSize = excelSheetStyleExportAttribute.FontSizeData;
 
                     //go to the next row
                     col++;
@@ -167,7 +203,7 @@ namespace CollectionToX.Exports
                 }
 
                 //go to the next row
-                _rowNumber++;
+                _worksheetRowNumbers[_worksheet.Name] = _worksheetRowNumbers[_worksheet.Name] + 1;
 
             }
 
