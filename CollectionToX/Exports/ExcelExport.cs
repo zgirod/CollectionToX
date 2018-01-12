@@ -38,10 +38,18 @@ namespace CollectionToX.Exports
 
         }
 
+        public ExcelExport AddCollectionToExistingSheet<T>(IEnumerable<T> data, string sheetName, string optionalKey)
+        {
+
+            AddToExcelWorksheet(data, typeof(T), sheetName, optionalKey);
+            return this;
+
+        }
+
         public ExcelExport AddCollectionToExistingSheet<T>(IEnumerable<T> data, string sheetName)
         {
 
-            AddToExcelWorksheet(data, typeof(T), sheetName);
+            AddToExcelWorksheet(data, typeof(T), sheetName, null);
             return this;
 
         }
@@ -79,12 +87,12 @@ namespace CollectionToX.Exports
 
         }
 
-        private void BuildExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName)
+        private void BuildExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName, string optionalKey)
         {
 
             _worksheet = _workbook.Worksheets.Add(sheetName.CleanExcelSheetName());
             var excelSheetStyleExportAttribute = (ExcelSheetStyleExportAttribute)type.GetCustomAttributes(true).FirstOrDefault(x => x is ExcelSheetStyleExportAttribute) ?? new ExcelSheetStyleExportAttribute();
-            var propertyList = ObjectToPropertList.GetPropertyList(type);
+            var propertyList = ObjectToPropertList.GetPropertyList(type, optionalKey);
 
             //add in the header row
             AddHeaderRow(propertyList, excelSheetStyleExportAttribute);
@@ -93,19 +101,26 @@ namespace CollectionToX.Exports
             AddDataRows(data, propertyList, excelSheetStyleExportAttribute);
 
             //adjust each column to the contents
-            for(int col = 1; col <= propertyList.Count(); col++)
+            for (int col = 1; col <= propertyList.Count(); col++)
                 _worksheet.Column(col).AdjustToContents();
 
         }
 
-        private void AddToExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName)
+        private void BuildExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName)
+        {
+
+            BuildExcelWorksheet<T>(data, type, sheetName, null);
+
+        }
+
+        private void AddToExcelWorksheet<T>(IEnumerable<T> data, Type type, string sheetName, string optionalKey)
         {
 
             //get the existing excel
             var cleanName = sheetName.CleanExcelSheetName();
             _worksheet = _workbook.Worksheets.Single(x => x.Name == cleanName);
             var excelSheetStyleExportAttribute = (ExcelSheetStyleExportAttribute)type.GetCustomAttributes(true).FirstOrDefault(x => x is ExcelSheetStyleExportAttribute) ?? new ExcelSheetStyleExportAttribute();
-            var propertyList = ObjectToPropertList.GetPropertyList(type);
+            var propertyList = ObjectToPropertList.GetPropertyList(type, optionalKey);
 
             //add in the data
             AddDataRows(data, propertyList, excelSheetStyleExportAttribute);

@@ -61,11 +61,20 @@ namespace CollectionToX.Exports
 
         }
 
+        public DelimitedExport AddCollection<T>(IEnumerable<T> data, string optionalKey)
+        {
+
+            //add data to the stream
+            BuildDelimitedExport(data, typeof(T), optionalKey);
+            return this;
+
+        }
+
         public DelimitedExport AddCollection<T>(IEnumerable<T> data)
         {
 
             //add data to the stream
-            BuildDelimitedExport(data, typeof(T));
+            BuildDelimitedExport(data, typeof(T), null);
             return this;
 
         }
@@ -97,10 +106,10 @@ namespace CollectionToX.Exports
 
         }
 
-        private void BuildDelimitedExport<T>(IEnumerable<T> data, Type type)
+        private void BuildDelimitedExport<T>(IEnumerable<T> data, Type type, string optionalKey)
         {
 
-            var propertyList = ObjectToPropertList.GetPropertyList(type);
+            var propertyList = ObjectToPropertList.GetPropertyList(type, optionalKey);
 
             //add in the header row
             AddHeaderRow(propertyList);

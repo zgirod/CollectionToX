@@ -51,6 +51,7 @@
     <Compile Include="Attributes\ExcelPropertyStyleExportAttribute.cs" />
     <Compile Include="Attributes\ExcelSheetStyleExportAttribute.cs" />
     <Compile Include="Attributes\IgnorePropertyExportAttribute.cs" />
+    <Compile Include="Attributes\OptionalPropertyAttribute.cs" />
     <Compile Include="Attributes\SortOrderExportAttribute.cs" />
     <Compile Include="CollectionToXExtensions.cs" />
     <Compile Include="Exports\DelimitedExport.cs" />
