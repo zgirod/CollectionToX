@@ -12,6 +12,7 @@ namespace CollectionToX.Attributes
     {
 
         public string OptionalKey { get; set; }
+        public bool ShowOnMatch { get; set; }
 
         public OptionalPropertyAttribute()
         {

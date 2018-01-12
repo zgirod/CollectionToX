@@ -34,9 +34,18 @@ namespace CollectionToX.Helpers
                         x.CustomAttributes.Any(attribute => attribute is OptionalPropertyAttribute) == false
                         ||
                         (
-                            x.CustomAttributes.Any(attribute => attribute is OptionalPropertyAttribute) == true
-                            && optionalKey != null
-                            && ((OptionalPropertyAttribute)x.CustomAttributes.First(attribute => attribute is OptionalPropertyAttribute)).OptionalKey == optionalKey
+                            (
+                                x.CustomAttributes.Any(attribute => attribute is OptionalPropertyAttribute) == true
+                                && optionalKey != null
+                                && ((OptionalPropertyAttribute)x.CustomAttributes.First(attribute => attribute is OptionalPropertyAttribute)).OptionalKey == optionalKey
+                                && ((OptionalPropertyAttribute)x.CustomAttributes.First(attribute => attribute is OptionalPropertyAttribute)).ShowOnMatch == true
+                            )
+                            ||
+                            (
+                                x.CustomAttributes.Any(attribute => attribute is OptionalPropertyAttribute) == true
+                                && ((OptionalPropertyAttribute)x.CustomAttributes.First(attribute => attribute is OptionalPropertyAttribute)).OptionalKey != optionalKey
+                                && ((OptionalPropertyAttribute)x.CustomAttributes.First(attribute => attribute is OptionalPropertyAttribute)).ShowOnMatch == false
+                            )
                         )
                     )
                 )

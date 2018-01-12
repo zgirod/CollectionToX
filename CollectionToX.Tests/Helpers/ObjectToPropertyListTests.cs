@@ -48,11 +48,15 @@ namespace CollectionToX.Tests.Helpers
         public string Fifth { get; set; }
 
         [SortOrderExport(SortOrder = 3)]
-        [OptionalProperty(OptionalKey = "PASSPORT")]
+        [OptionalProperty(OptionalKey = "PASSPORT", ShowOnMatch = true)]
         public double SixthOptional { get; set; }
 
         [SortOrderExport(SortOrder = 4)]
-        public decimal Seven { get; set; }
+        [OptionalProperty(OptionalKey = "PASSPORT", ShowOnMatch = false)]
+        public double SevenOptional { get; set; }
+
+        [SortOrderExport(SortOrder = 5)]
+        public decimal Eight { get; set; }
     }
 
     public class ObjectToPropertyListTests
@@ -92,24 +96,26 @@ namespace CollectionToX.Tests.Helpers
         public void ObjectToPropertyList_IgnoreOrderAndOptionalExcludeNullAttributesTest()
         {
             var propertyList = ObjectToPropertList.GetPropertyList(typeof(IgnoreOrderAndOptionalAttributes), null);
-            Assert.That(propertyList.Count, Is.EqualTo(5));
+            Assert.That(propertyList.Count, Is.EqualTo(6));
             Assert.That(propertyList[0].PropertyInfo.Name, Is.EqualTo("Fourth"));
             Assert.That(propertyList[1].PropertyInfo.Name, Is.EqualTo("Third"));
-            Assert.That(propertyList[2].PropertyInfo.Name, Is.EqualTo("Seven"));
-            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("First"));
-            Assert.That(propertyList[4].PropertyInfo.Name, Is.EqualTo("Fifth"));
+            Assert.That(propertyList[2].PropertyInfo.Name, Is.EqualTo("SevenOptional"));
+            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("Eight"));
+            Assert.That(propertyList[4].PropertyInfo.Name, Is.EqualTo("First"));
+            Assert.That(propertyList[5].PropertyInfo.Name, Is.EqualTo("Fifth"));
         }
 
         [Test]
         public void ObjectToPropertyList_IgnoreOrderAndOptionalExcludeWrongKeyAttributesTest()
         {
             var propertyList = ObjectToPropertList.GetPropertyList(typeof(IgnoreOrderAndOptionalAttributes), "LICENSE");
-            Assert.That(propertyList.Count, Is.EqualTo(5));
+            Assert.That(propertyList.Count, Is.EqualTo(6));
             Assert.That(propertyList[0].PropertyInfo.Name, Is.EqualTo("Fourth"));
             Assert.That(propertyList[1].PropertyInfo.Name, Is.EqualTo("Third"));
-            Assert.That(propertyList[2].PropertyInfo.Name, Is.EqualTo("Seven"));
-            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("First"));
-            Assert.That(propertyList[4].PropertyInfo.Name, Is.EqualTo("Fifth"));
+            Assert.That(propertyList[2].PropertyInfo.Name, Is.EqualTo("SevenOptional"));
+            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("Eight"));
+            Assert.That(propertyList[4].PropertyInfo.Name, Is.EqualTo("First"));
+            Assert.That(propertyList[5].PropertyInfo.Name, Is.EqualTo("Fifth"));
         }
 
         [Test]
@@ -120,7 +126,7 @@ namespace CollectionToX.Tests.Helpers
             Assert.That(propertyList[0].PropertyInfo.Name, Is.EqualTo("Fourth"));
             Assert.That(propertyList[1].PropertyInfo.Name, Is.EqualTo("Third"));
             Assert.That(propertyList[2].PropertyInfo.Name, Is.EqualTo("SixthOptional"));
-            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("Seven"));
+            Assert.That(propertyList[3].PropertyInfo.Name, Is.EqualTo("Eight"));
             Assert.That(propertyList[4].PropertyInfo.Name, Is.EqualTo("First"));
             Assert.That(propertyList[5].PropertyInfo.Name, Is.EqualTo("Fifth"));
         }

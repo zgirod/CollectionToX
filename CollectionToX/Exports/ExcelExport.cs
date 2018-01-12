@@ -28,13 +28,20 @@ namespace CollectionToX.Exports
         private IXLWorksheet _worksheet { get; set; }
         private Dictionary<string, int> _worksheetRowNumbers;
 
-        public ExcelExport AddCollectionToExcel<T>(IEnumerable<T> data, string sheetName)
+        public ExcelExport AddCollectionToExcel<T>(IEnumerable<T> data, string sheetName, string optionalKey)
         {
 
             //build the excel workbook
             _worksheetRowNumbers.Add(sheetName.CleanExcelSheetName(), 1);
-            BuildExcelWorksheet(data, typeof(T), sheetName);
+            BuildExcelWorksheet(data, typeof(T), sheetName, optionalKey);
             return this;
+
+        }
+
+        public ExcelExport AddCollectionToExcel<T>(IEnumerable<T> data, string sheetName)
+        {
+
+            return AddCollectionToExcel<T>(data, sheetName, null);
 
         }
 
