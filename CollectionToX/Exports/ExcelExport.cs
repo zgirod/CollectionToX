@@ -195,13 +195,6 @@ namespace CollectionToX.Exports
 
                     }
 
-                    //set the value
-                    var obj = property.PropertyInfo.GetValue(item, null);
-                    if (obj != null)
-                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = obj.ToString();
-                    else
-                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = null;
-
                     //set column based styles
                     if (excelPropertyStyleExportAttribute.NumberFormatId.HasValue == true)
                     {
@@ -218,6 +211,13 @@ namespace CollectionToX.Exports
                     //set the sheet based styles
                     _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontName = excelSheetStyleExportAttribute.FontFamily;
                     _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Style.Font.FontSize = excelSheetStyleExportAttribute.FontSizeData;
+
+                    //set the value
+                    var obj = property.PropertyInfo.GetValue(item, null);
+                    if (obj != null)
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = obj.ToString();
+                    else
+                        _worksheet.Cell(_worksheetRowNumbers[_worksheet.Name], col).Value = null;
 
                     //go to the next row
                     col++;

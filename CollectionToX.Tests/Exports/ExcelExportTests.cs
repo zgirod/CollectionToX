@@ -60,5 +60,27 @@ namespace CollectionToX.Tests.Exports
 
         }
 
+        [Test]
+        public void ExcelExport_TextTest()
+        {
+
+
+            var filepath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/text.xlsx";
+            var data = new List<Bar>()
+            {
+                new Bar() { Text = "121196" },
+                new Bar() { Text = "00121196" },
+                new Bar() { Text = "1211E6" },
+                new Bar() { Text = "1211e6" },
+                new Bar() { Text = "00121AAA" }
+            };
+
+            var export = new ExcelExport();
+            export.AddCollectionToExcel<Bar>(data, "first");
+            export.AddCollectionToExcel<Bar>(data, "second");
+            export.SaveAsExcelFile(filepath);
+
+        }
+
     }
 }

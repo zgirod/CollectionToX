@@ -55,6 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Exports\Bar.cs" />
     <Compile Include="Exports\DelimitedExportTests.cs" />
     <Compile Include="Exports\ExcelExportTests.cs" />
     <Compile Include="Exports\Foo.cs" />
